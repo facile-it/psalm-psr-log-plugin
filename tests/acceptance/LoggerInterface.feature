@@ -19,16 +19,76 @@ Feature: LoggerInterface
       $logger = getLogger();
       """
 
-  Scenario: An object with `__toString()` method should not throw errors
+  Scenario: A message string without templates in context should throw errors for missing keys
+    Given I have the following code
+      """
+      getLogger()->emergency('foo {bar} {baz}', ['bar' => 'bar']);
+      getLogger()->alert('foo {bar} {baz}', ['bar' => 'bar']);
+      getLogger()->critical('foo {bar} {baz}', ['bar' => 'bar']);
+      getLogger()->error('foo {bar} {baz}', ['bar' => 'bar']);
+      getLogger()->warning('foo {bar} {baz}', ['bar' => 'bar']);
+      getLogger()->notice('foo {bar} {baz}', ['bar' => 'bar']);
+      getLogger()->info('foo {bar} {baz}', ['bar' => 'bar']);
+      getLogger()->debug('foo {bar} {baz}', ['bar' => 'bar']);
+      """
+    When I run psalm
+    Then I see these errors
+      | Type            | Message |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+    And I see no other errors
+
+  Scenario: A message object without templates in context should throw errors for missing keys
     Given I have the following code
       """
       class Message
       {
           /**
-           * @psalm-suppress InvalidReturnType
+           * @psalm-return 'foo {bar} {baz}'
            */
           public function __toString(): string
-          {}
+          {
+              return 'foo {bar} {baz}';
+          }
+      }
+
+      getLogger()->emergency(new Message(), ['bar' => 'bar']);
+      getLogger()->alert(new Message(), ['bar' => 'bar']);
+      getLogger()->critical(new Message(), ['bar' => 'bar']);
+      getLogger()->error(new Message(), ['bar' => 'bar']);
+      getLogger()->warning(new Message(), ['bar' => 'bar']);
+      getLogger()->notice(new Message(), ['bar' => 'bar']);
+      getLogger()->info(new Message(), ['bar' => 'bar']);
+      getLogger()->debug(new Message(), ['bar' => 'bar']);
+      """
+    When I run psalm
+    Then I see these errors
+      | Type            | Message |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+      | InvalidArgument | Missing placeholders in context: baz |
+    And I see no other errors
+
+  Scenario: An object with `__toString()` method should not throw errors
+    Given I have the following code
+      """
+      class Message
+      {
+          public function __toString(): string
+          {
+              return 'foo';
+          }
       }
 
       getLogger()->emergency(new Message(), []);
