@@ -3,3 +3,4 @@ tests/ export-ignore
 .php_cs* export-ignore
 psalm.* export-ignore
 phpunit.* export-ignore
+codeception.yml export-ignore
