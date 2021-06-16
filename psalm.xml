@@ -14,6 +14,10 @@
     </projectFiles>
 
     <plugins>
-        <pluginClass class="Facile\Psalm\PsrLogPlugin\Plugin"/>
+        <pluginClass class="Facile\Psalm\PsrLogPlugin\Plugin">
+            <requiredKey>requiredKey1</requiredKey>
+            <requiredKey>requiredKey2</requiredKey>
+            <ignoredKey>ignoredKey1</ignoredKey>
+        </pluginClass>
     </plugins>
 </psalm>

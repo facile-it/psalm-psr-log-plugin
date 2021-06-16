@@ -33,6 +33,28 @@ use Psr\Log\LoggerInterface;
 
 class LoggerHook implements AfterMethodCallAnalysisInterface
 {
+    /** @var list<string> */
+    private static $requiredKeys = [];
+
+    /** @var list<string> */
+    private static $ignoredkeys = [];
+
+    /**
+     * @param list<string> $requiredKeys
+     */
+    public static function setRequiredKeys(array $requiredKeys): void
+    {
+        self::$requiredKeys = $requiredKeys;
+    }
+
+    /**
+     * @param list<string> $ignoredkeys
+     */
+    public static function setIgnoredkeys(array $ignoredkeys): void
+    {
+        self::$ignoredkeys = $ignoredkeys;
+    }
+
     /**
      * @template T of Atomic
      *
@@ -107,11 +129,19 @@ class LoggerHook implements AfterMethodCallAnalysisInterface
             return;
         }
 
-        $placeholders = self::getPlaceholders($messageString);
+        $placeholders = array_merge(
+            self::getPlaceholders($messageString),
+            static::$requiredKeys
+        );
 
         if (0 === count($placeholders)) {
             return;
         }
+
+        $placeholders = array_diff(
+            $placeholders,
+            static::$ignoredkeys
+        );
 
         /** @var non-empty-array<int|string, Union> $placeholdersTypes */
         $placeholdersTypes = array_reduce(

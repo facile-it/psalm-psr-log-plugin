@@ -8,8 +8,8 @@ $rulesProvider = new Facile\CodingStandards\Rules\CompositeRulesProvider([
     new Facile\CodingStandards\Rules\RiskyRulesProvider(),
     new Facile\CodingStandards\Rules\ArrayRulesProvider([
         'visibility_required' => ['property', 'method', 'const'],
-        'heredoc_indentation' => true,
-        'heredoc_to_nowdoc' => true,
+        'heredoc_indentation' => false,
+        'heredoc_to_nowdoc' => false,
         'no_null_property_initialization' => true,
         'no_useless_else' => true,
         'no_useless_return' => true,

@@ -20,10 +20,10 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^7.2 || ^8.0",
+        "ext-simplexml": "*",
         "vimeo/psalm": "^4.7"
     },
     "require-dev": {
-        "ext-simplexml": "*",
         "psr/log": "^1.1",
         "codeception/codeception": "^4.1",
         "facile-it/facile-coding-standard": "^0.4.1",
