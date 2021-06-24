@@ -1,5 +1,11 @@
 # psalm-psr-log-plugin
 
+[![Latest Stable Version](http://poser.pugx.org/facile-it/psalm-psr-log-plugin/v)](https://packagist.org/packages/facile-it/psalm-psr-log-plugin)
+[![Total Downloads](http://poser.pugx.org/facile-it/psalm-psr-log-plugin/downloads)](https://packagist.org/packages/facile-it/psalm-psr-log-plugin)
+[![Latest Unstable Version](http://poser.pugx.org/facile-it/psalm-psr-log-plugin/v/unstable)](https://packagist.org/packages/facile-it/psalm-psr-log-plugin)
+[![License](http://poser.pugx.org/facile-it/psalm-psr-log-plugin/license)](https://packagist.org/packages/facile-it/psalm-psr-log-plugin)
+
+
 A Psalm plugin to check psr/log (PSR-3) usage.
 
 ## Features
