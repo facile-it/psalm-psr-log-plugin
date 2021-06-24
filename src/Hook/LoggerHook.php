@@ -20,10 +20,10 @@ use PhpParser\Node\Expr\MethodCall;
 use function preg_match_all;
 use Psalm\Codebase;
 use Psalm\CodeLocation;
-use Psalm\Context;
 use Psalm\Issue\InvalidArgument;
 use Psalm\IssueBuffer;
-use Psalm\Plugin\Hook\AfterMethodCallAnalysisInterface;
+use Psalm\Plugin\EventHandler\AfterMethodCallAnalysisInterface;
+use Psalm\Plugin\EventHandler\Event\AfterMethodCallAnalysisEvent;
 use Psalm\StatementsSource;
 use Psalm\Type\Atomic;
 use Psalm\Type\Atomic\TKeyedArray;
@@ -74,22 +74,15 @@ class LoggerHook implements AfterMethodCallAnalysisInterface
         return array_values($atomics);
     }
 
-    public static function afterMethodCallAnalysis(
-        Expr $expr,
-        string $method_id,
-        string $appearing_method_id,
-        string $declaring_method_id,
-        Context $context,
-        StatementsSource $statements_source,
-        Codebase $codebase,
-        array &$file_replacements = [],
-        Union &$return_type_candidate = null
-    ): void {
+    public static function afterMethodCallAnalysis(AfterMethodCallAnalysisEvent $event): void
+    {
+        $expr = $event->getExpr();
+
         if (! $expr instanceof MethodCall) {
             return;
         }
 
-        [$className, $methodName] = explode('::', $declaring_method_id);
+        [$className, $methodName] = explode('::', $event->getDeclaringMethodId());
 
         $allowedMethods = [
             'emergency',
@@ -106,6 +99,8 @@ class LoggerHook implements AfterMethodCallAnalysisInterface
             return;
         }
 
+        $codebase = $event->getCodebase();
+
         if (LoggerInterface::class !== $className && ! $codebase->classImplements($className, LoggerInterface::class)) {
             return;
         }
@@ -117,13 +112,15 @@ class LoggerHook implements AfterMethodCallAnalysisInterface
         $message = $expr->args[0];
         $context = $expr->args[1];
 
+        $statementsSource = $event->getStatementsSource();
+
         IssueBuffer::remove(
-            $statements_source->getFilePath(),
+            $statementsSource->getFilePath(),
             'ImplicitToStringCast',
             $message->getStartFilePos()
         );
 
-        $messageString = self::getMessage($message->value, $statements_source, $codebase);
+        $messageString = self::getMessage($message->value, $statementsSource, $codebase);
 
         if (null === $messageString) {
             return;
@@ -157,7 +154,7 @@ class LoggerHook implements AfterMethodCallAnalysisInterface
             []
         );
 
-        $nodeTypeProvider = $statements_source->getNodeTypeProvider();
+        $nodeTypeProvider = $statementsSource->getNodeTypeProvider();
         $contextType = $nodeTypeProvider->getType($context->value);
 
         if (null === $contextType) {
@@ -185,9 +182,9 @@ class LoggerHook implements AfterMethodCallAnalysisInterface
         IssueBuffer::accepts(
             new InvalidArgument(
                 'Missing placeholders in context: ' . implode(', ', array_diff($placeholders, $contextKeys)),
-                new CodeLocation($statements_source, $context)
+                new CodeLocation($statementsSource, $context)
             ),
-            $statements_source->getSuppressedIssues()
+            $statementsSource->getSuppressedIssues()
         );
     }
 
