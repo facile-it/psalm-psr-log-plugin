@@ -18,12 +18,14 @@ A Psalm plugin to check psr/log (PSR-3) usage.
 This plugin checks for missing context keys for placeholders:
 
 ```php
-/** @var \Psr\Log\LoggerInterface $logger */
+/** @var Psr\Log\LoggerInterface $logger */
 
-$logger->info('This is a log message with {placeholder}', []);
-  //                                                      ^ Error
-  // InvalidArgument: Missing placeholders in context: placeholder
+$logger->info('User {username} logged in at {datetime}', [
+    'username' => 'user-username',
+]);
 ```
+
+![Psalm Error Screenshot](https://raw.githubusercontent.com/facile-it/psalm-psr-log-plugin/master/docs/images/psalm_error1.png)
 
 ## Usage
 
