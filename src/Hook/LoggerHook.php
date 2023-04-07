@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Facile\Psalm\PsrLogPlugin\Hook;
 
+use PhpParser\Node\Arg;
+use Psalm\Issue\ImplicitToStringCast;
 use function array_diff;
 use function array_filter;
 use function array_keys;
@@ -112,13 +114,51 @@ class LoggerHook implements AfterMethodCallAnalysisInterface
         $message = $expr->args[0];
         $context = $expr->args[1];
 
+        if (! $message instanceof Arg || ! $context instanceof Arg) {
+            return;
+        }
+
         $statementsSource = $event->getStatementsSource();
 
-        IssueBuffer::remove(
-            $statementsSource->getFilePath(),
-            'ImplicitToStringCast',
-            $message->getStartFilePos()
-        );
+        $messageType = $statementsSource->getNodeTypeProvider()->getType($message->value);
+
+        if ($messageType === null) {
+            return;
+        }
+
+        foreach ($messageType->getAtomicTypes() as $type) {
+            if ($type instanceof Atomic\TNamedObject) {
+                IssueBuffer::remove(
+                    $statementsSource->getFilePath(),
+                    'ImplicitToStringCast',
+                    $message->getStartFilePos()
+                );
+
+                IssueBuffer::remove(
+                    $statementsSource->getFilePath(),
+                    'InvalidCast',
+                    $message->getStartFilePos()
+                );
+
+                IssueBuffer::remove(
+                    $statementsSource->getFilePath(),
+                    'InvalidArgument',
+                    $message->getStartFilePos()
+                );
+
+                if (! $codebase->methodExists($type->value . '::__toString')) {
+                    IssueBuffer::accepts(
+                        new InvalidArgument(
+                            "Argument 1 of {$event->getDeclaringMethodId()} expects string|Stringable, {$type->value} provided",
+                            new CodeLocation($statementsSource, $context)
+                        ),
+                        $statementsSource->getSuppressedIssues()
+                    );
+
+                    return;
+                }
+            }
+        }
 
         $messageString = self::getMessage($message->value, $statementsSource, $codebase);
 
@@ -172,11 +212,12 @@ class LoggerHook implements AfterMethodCallAnalysisInterface
             return;
         }
 
+        /** @var Atomic\TKeyedArray[] $contextTypes */
         $contextTypes = self::filterTypes($contextType, Atomic\TKeyedArray::class);
         $contextKeys = [];
 
         foreach ($contextTypes as $type) {
-            $contextKeys = array_merge($contextKeys, array_keys($type->getChildNodes()));
+            $contextKeys = array_merge($contextKeys, array_keys($type->properties));
         }
 
         IssueBuffer::accepts(
@@ -223,6 +264,10 @@ class LoggerHook implements AfterMethodCallAnalysisInterface
         return $literalStringTypes[0]->value;
     }
 
+    /**
+     * @param string $message
+     * @return list<string>
+     */
     private static function getPlaceholders(string $message): array
     {
         preg_match_all('/{([a-zA-Z0-9_]+)}/', $message, $matches);

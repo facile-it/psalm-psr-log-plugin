@@ -2,4 +2,4 @@
 .build/!.gitkeep
 vendor/
 composer.lock
-.php_cs.cache
+.php-cs-fixer.cache

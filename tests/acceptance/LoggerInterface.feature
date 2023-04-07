@@ -138,7 +138,6 @@ Feature: LoggerInterface
       getLogger()->info(new Message(), ['requiredKey1' => 'req']);
       getLogger()->debug(new Message(), ['requiredKey1' => 'req']);
       """
-    When I run psalm
     Then I see no errors
 
   Scenario: An object without `__toString()` method should throw errors
@@ -160,20 +159,12 @@ Feature: LoggerInterface
     When I run psalm
     Then I see these errors
       | Type            | Message                                                                                                                      |
-      | InvalidCast     | Message cannot be cast to string                                                  |
-      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::emergency expects string, Message provided |
-      | InvalidCast     | Message cannot be cast to string                                                  |
-      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::alert expects string, Message provided     |
-      | InvalidCast     | Message cannot be cast to string                                                  |
-      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::critical expects string, Message provided  |
-      | InvalidCast     | Message cannot be cast to string                                                  |
-      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::error expects string, Message provided     |
-      | InvalidCast     | Message cannot be cast to string                                                  |
-      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::warning expects string, Message provided   |
-      | InvalidCast     | Message cannot be cast to string                                                  |
-      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::notice expects string, Message provided    |
-      | InvalidCast     | Message cannot be cast to string                                                  |
-      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::info expects string, Message provided      |
-      | InvalidCast     | Message cannot be cast to string                                                  |
-      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::debug expects string, Message provided     |
+      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::emergency expects string\|Stringable, Message provided |
+      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::alert expects string\|Stringable, Message provided     |
+      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::critical expects string\|Stringable, Message provided  |
+      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::error expects string\|Stringable, Message provided     |
+      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::warning expects string\|Stringable, Message provided   |
+      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::notice expects string\|Stringable, Message provided    |
+      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::info expects string\|Stringable, Message provided      |
+      | InvalidArgument | Argument 1 of Psr\Log\LoggerInterface::debug expects string\|Stringable, Message provided     |
     And I see no other errors

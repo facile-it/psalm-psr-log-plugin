@@ -10,7 +10,10 @@
         }
     ],
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "facile-it/facile-coding-standard": true
+        }
     },
     "extra": {
         "psalm": {
@@ -21,12 +24,12 @@
     "require": {
         "php": "^7.2 || ^8.0",
         "ext-simplexml": "*",
-        "vimeo/psalm": "^4.7"
+        "psr/log": "^1.1 || ^2.0 || ^3.0",
+        "vimeo/psalm": "^4.7 || ^5.0"
     },
     "require-dev": {
-        "psr/log": "^1.1",
         "codeception/codeception": "^4.1",
-        "facile-it/facile-coding-standard": "^0.4.1",
+        "facile-it/facile-coding-standard": "^0.5.2",
         "weirdan/codeception-psalm-module": "^0.13.0"
     },
     "autoload": {
