@@ -11,13 +11,16 @@ use Psalm\Plugin\PluginEntryPointInterface;
 use Psalm\Plugin\RegistrationInterface;
 use SimpleXMLElement;
 
+/**
+ * @psalm-api
+ */
 class Plugin implements PluginEntryPointInterface
 {
     public function __invoke(RegistrationInterface $registration, ?SimpleXMLElement $config = null): void
     {
         class_exists(Hook\LoggerHook::class);
 
-        if ($config) {
+        if ($config !== null) {
             Hook\LoggerHook::setRequiredKeys($this->getKeys($config, 'requiredKey'));
             Hook\LoggerHook::setIgnoredkeys($this->getKeys($config, 'ignoredKey'));
         }
@@ -33,7 +36,7 @@ class Plugin implements PluginEntryPointInterface
         /** @var null|SimpleXMLElement|list<SimpleXMLElement> $keys */
         $keys = $config->{$path};
 
-        if (! $keys) {
+        if ($keys === null) {
             return [];
         }
 
