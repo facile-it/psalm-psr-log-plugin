@@ -20,6 +20,10 @@ jobs:
           - 8.2
         dependencies:
           - highest
+        composer-options:
+          - --with vimeo/psalm:^4
+          - --with vimeo/psalm:^5
+          - --with vimeo/psalm:^6
 
     steps:
       - name: "Checkout"
@@ -30,6 +34,7 @@ jobs:
         with:
           coverage: none
           php-version: ${{ matrix.php-version }}
+          composer-options: ${{ matrix.composer_options }}
 
       - uses: ramsey/composer-install@v3
         with:
