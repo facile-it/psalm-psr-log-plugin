@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Facile\Psalm\PsrLogPlugin\Hook;
 
-use PhpParser\Node\Arg;
-use Psalm\Issue\ImplicitToStringCast;
 use function array_diff;
 use function array_filter;
 use function array_keys;
@@ -17,6 +15,7 @@ use function explode;
 use function implode;
 use function in_array;
 use function is_a;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use function preg_match_all;
@@ -266,6 +265,7 @@ class LoggerHook implements AfterMethodCallAnalysisInterface
 
     /**
      * @param string $message
+     *
      * @return list<string>
      */
     private static function getPlaceholders(string $message): array

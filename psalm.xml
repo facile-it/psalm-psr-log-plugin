@@ -16,4 +16,12 @@
     <plugins>
         <pluginClass class="Facile\Psalm\PsrLogPlugin\Plugin" />
     </plugins>
+
+    <issueHandlers>
+        <UndefinedClass>
+            <errorLevel type="suppress">
+                <referencedClass name="Psalm\IssueBuffer"/>
+            </errorLevel>
+        </UndefinedClass>
+    </issueHandlers>
 </psalm>
