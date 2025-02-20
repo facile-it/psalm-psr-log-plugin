@@ -12,7 +12,7 @@ on:
 jobs:
   static-code-analysis:
     name: "Static Code Analysis"
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-latest"
 
     strategy:
       matrix:
@@ -20,49 +20,32 @@ jobs:
           - 8.2
         dependencies:
           - highest
+        composer-options:
+          - --with vimeo/psalm:^4
+          - --with vimeo/psalm:^5
+          - --with vimeo/psalm:^6
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: "Install PHP with extensions"
         uses: shivammathur/setup-php@v2
         with:
           coverage: none
           php-version: ${{ matrix.php-version }}
+          composer-options: ${{ matrix.composer_options }}
 
-      - name: "Determine composer cache directory"
-        id: determine-composer-cache-directory
-        run: echo "::set-output name=directory::$(composer config cache-dir)"
-
-      - name: "Cache dependencies installed with composer"
-        uses: actions/cache@v1
+      - uses: ramsey/composer-install@v3
         with:
-          path: ${{ steps.determine-composer-cache-directory.outputs.directory }}
-          key: php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.json') }}
-          restore-keys: php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-
-
-      - name: "Install lowest dependencies from composer.json"
-        if: matrix.dependencies == 'lowest'
-        run: composer update --no-interaction --no-progress --no-suggest --prefer-lowest
-
-      - name: "Install highest dependencies from composer.json"
-        if: matrix.dependencies == 'highest'
-        run: composer install --no-interaction --no-progress --no-suggest
-
-      - name: "Cache cache directory for vimeo/psalm"
-        uses: actions/cache@v1
-        with:
-          path: .build/psalm
-          key: php-${{ matrix.php-version }}-psalm-${{ github.sha }}
-          restore-keys: php-${{ matrix.php-version }}-psalm-
+          dependency-versions: ${{ matrix.dependencies }}
 
       - name: "Run vimeo/psalm"
         run: vendor/bin/psalm --find-unused-psalm-suppress --shepherd --show-info=false --stats --output-format=github
 
   tests:
     name: "Tests"
-    runs-on: "ubuntu-20.04"
+    runs-on: "ubuntu-latest"
 
     strategy:
       matrix:
@@ -73,13 +56,17 @@ jobs:
           - 8.0
           - 8.1
           - 8.2
+          - 8.3
+          - 8.4
         dependencies:
           - highest
-          - lowest
+        include:
+          - php-version: 7.2
+            dependencies: lowest
 
     steps:
       - name: "Checkout"
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: "Install PHP with extensions"
         uses: shivammathur/setup-php@v2
@@ -87,24 +74,9 @@ jobs:
           coverage: none
           php-version: ${{ matrix.php-version }}
 
-      - name: "Determine composer cache directory"
-        id: determine-composer-cache-directory
-        run: echo "::set-output name=directory::$(composer config cache-dir)"
-
-      - name: "Cache dependencies installed with composer"
-        uses: actions/cache@v1
+      - uses: ramsey/composer-install@v3
         with:
-          path: ${{ steps.determine-composer-cache-directory.outputs.directory }}
-          key: php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-${{ hashFiles('composer.json') }}
-          restore-keys: php-${{ matrix.php-version }}-composer-${{ matrix.dependencies }}-
-
-      - name: "Install lowest dependencies from composer.json"
-        if: matrix.dependencies == 'lowest'
-        run: composer update --no-interaction --no-progress --no-suggest --prefer-lowest
-
-      - name: "Install highest dependencies from composer.json"
-        if: matrix.dependencies == 'highest'
-        run: composer install --no-interaction --no-progress --no-suggest
+          dependency-versions: ${{ matrix.dependencies }}
 
       - name: "Build acceptance tests with codeception"
         run: vendor/bin/codecept build
