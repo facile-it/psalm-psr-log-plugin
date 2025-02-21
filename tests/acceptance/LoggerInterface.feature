@@ -85,7 +85,7 @@ Feature: LoggerInterface
   Scenario: A message object without templates in context should throw errors for missing keys
     Given I have the following code
       """
-      class Message
+      final class Message
       {
           /**
            * @psalm-return 'foo {bar} {baz}'
@@ -143,7 +143,7 @@ Feature: LoggerInterface
   Scenario: An object without `__toString()` method should throw errors
     Given I have the following code
       """
-      class Message
+      final class Message
       {
       }
 
