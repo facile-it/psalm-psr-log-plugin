@@ -19,6 +19,7 @@ use Psalm\Type\Atomic\TKeyedArray;
 use Psalm\Type\Atomic\TMixed;
 use Psalm\Type\Union;
 use Psr\Log\LoggerInterface;
+
 use function array_diff;
 use function array_filter;
 use function array_keys;
@@ -32,7 +33,7 @@ use function in_array;
 use function is_a;
 use function preg_match_all;
 
-class LoggerHook implements AfterMethodCallAnalysisInterface
+final class LoggerHook implements AfterMethodCallAnalysisInterface
 {
     /** @var list<string> */
     private static $requiredKeys = [];

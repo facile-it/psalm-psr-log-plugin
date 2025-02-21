@@ -7,6 +7,7 @@ namespace Facile\Psalm\PsrLogPlugin;
 use Psalm\Plugin\PluginEntryPointInterface;
 use Psalm\Plugin\RegistrationInterface;
 use SimpleXMLElement;
+
 use function array_reduce;
 use function class_exists;
 use function is_array;

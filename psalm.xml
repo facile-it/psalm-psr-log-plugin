@@ -23,5 +23,6 @@
                 <referencedClass name="Psalm\IssueBuffer"/>
             </errorLevel>
         </UndefinedClass>
+        <MissingOverrideAttribute errorLevel="suppress"/>
     </issueHandlers>
 </psalm>
