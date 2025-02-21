@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Facile\Psalm\PsrLogPlugin;
 
-use function array_reduce;
-use function class_exists;
-use function is_array;
 use Psalm\Plugin\PluginEntryPointInterface;
 use Psalm\Plugin\RegistrationInterface;
 use SimpleXMLElement;
+use function array_reduce;
+use function class_exists;
+use function is_array;
 
 /**
  * @psalm-api

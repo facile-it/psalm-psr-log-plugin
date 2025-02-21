@@ -29,7 +29,7 @@
     },
     "require-dev": {
         "codeception/codeception": "^4.1",
-        "facile-it/facile-coding-standard": "^0.5.2",
+        "facile-it/facile-coding-standard": "^1.3.0",
         "weirdan/codeception-psalm-module": "^0.13.0"
     },
     "autoload": {

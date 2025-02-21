@@ -4,21 +4,9 @@ declare(strict_types=1);
 
 namespace Facile\Psalm\PsrLogPlugin\Hook;
 
-use function array_diff;
-use function array_filter;
-use function array_keys;
-use function array_merge;
-use function array_reduce;
-use function array_values;
-use function count;
-use function explode;
-use function implode;
-use function in_array;
-use function is_a;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
-use function preg_match_all;
 use Psalm\Codebase;
 use Psalm\CodeLocation;
 use Psalm\Issue\InvalidArgument;
@@ -31,6 +19,18 @@ use Psalm\Type\Atomic\TKeyedArray;
 use Psalm\Type\Atomic\TMixed;
 use Psalm\Type\Union;
 use Psr\Log\LoggerInterface;
+use function array_diff;
+use function array_filter;
+use function array_keys;
+use function array_merge;
+use function array_reduce;
+use function array_values;
+use function count;
+use function explode;
+use function implode;
+use function in_array;
+use function is_a;
+use function preg_match_all;
 
 class LoggerHook implements AfterMethodCallAnalysisInterface
 {
@@ -264,8 +264,6 @@ class LoggerHook implements AfterMethodCallAnalysisInterface
     }
 
     /**
-     * @param string $message
-     *
      * @return list<string>
      */
     private static function getPlaceholders(string $message): array
