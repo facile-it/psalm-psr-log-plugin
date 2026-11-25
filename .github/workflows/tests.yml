@@ -34,7 +34,7 @@ jobs:
           coverage: none
           php-version: ${{ matrix.php-version }}
 
-      - uses: ramsey/composer-install@v3
+      - uses: ramsey/composer-install@v4
         with:
           dependency-versions: ${{ matrix.dependencies }}
           composer-options: ${{ matrix.composer-options }}
@@ -71,7 +71,7 @@ jobs:
           coverage: none
           php-version: ${{ matrix.php-version }}
 
-      - uses: ramsey/composer-install@v3
+      - uses: ramsey/composer-install@v4
         with:
           dependency-versions: ${{ matrix.dependencies }}
 
