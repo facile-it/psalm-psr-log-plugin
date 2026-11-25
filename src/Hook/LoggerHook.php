@@ -202,7 +202,9 @@ final class LoggerHook implements AfterMethodCallAnalysisInterface
         }
 
         $newContextType = new Union([
-            new TKeyedArray($placeholdersTypes),
+            method_exists(Atomic\TKeyedArray::class, 'make')
+                ? Atomic\TKeyedArray::make($placeholdersTypes)
+                : new Atomic\TKeyedArray($placeholdersTypes),
         ]);
 
         if ($codebase->isTypeContainedByType(
