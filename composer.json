@@ -1,7 +1,7 @@
 {
     "name": "facile-it/psalm-psr-log-plugin",
     "description": "Psalm plugin for psr/log (PSR-3)",
-    "type": "library",
+    "type": "psalm-plugin",
     "license": "MIT",
     "authors": [
         {

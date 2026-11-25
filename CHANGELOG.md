@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.1.4] 2026-11-25
+### Changed
+- Package type declared as `psalm-plugin`
+
 ## [0.1.3] 2025-02-21
 ### Added
 - Allow Psalm 6
