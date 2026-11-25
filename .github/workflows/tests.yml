@@ -34,11 +34,11 @@ jobs:
         with:
           coverage: none
           php-version: ${{ matrix.php-version }}
-          composer-options: ${{ matrix.composer_options }}
 
       - uses: ramsey/composer-install@v3
         with:
           dependency-versions: ${{ matrix.dependencies }}
+          composer-options: ${{ matrix.composer-options }}
 
       - name: "Run vimeo/psalm"
         run: vendor/bin/psalm --find-unused-psalm-suppress --shepherd --show-info=false --stats --output-format=github
