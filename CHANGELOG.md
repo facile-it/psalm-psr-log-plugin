@@ -1,6 +1,8 @@
 # Change Log
 
 ## Unreleased
+### Added
+- Allow Psalm 7
 ### Removed
 - Drop support to Psalm v4
 

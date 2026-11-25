@@ -23,6 +23,7 @@ jobs:
         composer-options:
           - --with vimeo/psalm:^5
           - --with vimeo/psalm:^6
+          - --with vimeo/psalm:^7
 
     steps:
       - name: "Checkout"
