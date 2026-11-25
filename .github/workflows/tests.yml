@@ -21,7 +21,6 @@ jobs:
         dependencies:
           - highest
         composer-options:
-          - --with vimeo/psalm:^4
           - --with vimeo/psalm:^5
           - --with vimeo/psalm:^6
 

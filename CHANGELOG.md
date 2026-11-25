@@ -1,5 +1,9 @@
 # Change Log
 
+## Unreleased
+### Removed
+- Drop support to Psalm v4
+
 ## [0.1.4] 2026-11-25
 ### Changed
 - Package type declared as `psalm-plugin`
