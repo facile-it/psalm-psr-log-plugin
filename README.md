@@ -7,6 +7,7 @@
 
 
 A Psalm plugin to check psr/log (PSR-3) usage.
+Requires PHP 8.1 or later and Psalm 6.19+ or Psalm 7+.
 
 ## Features
 
