@@ -4,7 +4,8 @@
 ### Added
 - Allow Psalm 7
 ### Removed
-- Drop support to Psalm v4
+- Drop support to PHP below 8.1 
+- Drop support to Psalm below v6.19 
 
 ## [0.1.4] 2026-11-25
 ### Changed
