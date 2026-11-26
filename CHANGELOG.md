@@ -1,6 +1,9 @@
 # Change Log
 
 ## Unreleased
+- ...
+
+## [1.0.0] 2026-11-26
 ### Added
 - Allow Psalm 7
 ### Removed
